@@ -1,0 +1,60 @@
+
+<!--we update the template (html) to reflect the model created in the class (ts)
+A formGroup tracks the status and changes for each of its controls, if one of the controls changes, the parent control also emits a new status or value change-->
+
+<!--The form accepts input from the user, in a real scenario we want to capture this value and make it available for further processing outside the component. The FormGroup directive listens for the submit event emitted by the form and emits an ngSubmit event that we can bind to a callback function (ex: onSubmit())-->
+<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+    <label for="firstName">First Name: </label>
+    <!--the formControlName binds the individual input to the form control defined in FormGroup (class.ts)-->
+    <input type="text" id="firstName" formControlName="firstName" />
+    <label for="lastName">Last Name: </label>
+    <input type="text" id="lastName" formControlName="lastName" />
+
+   
+
+
+    <!--Add the Address nested form. The profileEditor is displayed as one group-->
+    <div formGroupName="address">
+        <h2>Address</h2>
+    
+        <label for="street">Street: </label>
+        <input type="text" id="street" formControlName="street">
+        
+        <label for="city">City: </label>
+        <input type="text" id="city" formControlName="city">
+        
+        <label for="country">Country: </label>
+        <input type="text" id="country" formControlName="country">
+        
+        <label for="postCode">Post Code: </label>
+        <input type="text" id="postCode" formControlName="postCode">
+    </div>
+
+     <!--The submit event is emitted the the form tag using the built-in DOM event that is triggered by clicking a button with submit type. This type also allows the user to press the enter key to submit the form-->
+     <p>Complete the form to enable button</p>
+     <!--the button is disable if the form is invalid-->
+     <button type="submit" [disabled]="!profileForm.valid">Submit</button>
+
+     <!--to attach the aliases from our form model (ts), we must add it to the template. Similar to the formGroupName input provided by FormGroupNameDirective
+    formArrayName binds communication from the form array instance to the template with FormArrayNameDirective-->
+    <div formArrayName="aliases">
+        <h2>Aliases</h2>
+        <button type="button" (click)="addAlias()"> + Add another Alias</button>
+        <!--the ngFor iterates over each form control instance provided by the aliases form array instance. Because form array elements are unnamed, we assign the index i variable and pass it to each control to bind it to the formControlName iput-->
+        <!--each time a new alias instance is added, the new form array instance is provided its control based on the index. This lets us track each individual control when calculating the status and value of the root control-->
+        <div *ngFor="let alias of aliases.controls; let i = index">
+            <!--the repeated alias template-->
+            <label for="alias-{{i}}">Alias: </label>
+            <input type="text" id="alias-{{i}}" [formControlName]="i">
+        </div>
+    </div>
+
+     <button type="button" (click)="updateProfile()">Update</button>
+
+</form>
+
+<h3>Form Value is: {{profileForm.value | json}}</h3>
+
+<p>Form Status: {{profileForm.status}}</p>
+
+

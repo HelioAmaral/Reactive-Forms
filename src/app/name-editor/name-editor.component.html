@@ -1,0 +1,10 @@
+<label for="name">Name: </label>
+<!--After creating the formControl in the component class, we associate it with a form control in the template (input). We update the template by using formControl binding (built in in ReactiveFormsModule)-->
+<!--the form control is now registered to the name input element in the template. The form control and DOM element communicate with each other-->
+<input type="text" id="name" [formControl]="name">
+
+<!--We use the button bellow to simulate a name update, when we click the Update Name button, updateName() will be called and the value inside the input will change-->
+<button type="button" (click)="updateName()">Update Name</button>
+
+<!--we can display the the value for the name input-->
+<h4>Value is: {{name.value}}</h4>
